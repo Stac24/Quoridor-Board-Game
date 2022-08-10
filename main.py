@@ -1,6 +1,7 @@
 import pygame
 from quoridor.board import Board;
-from quoridor.constants import WIDTH, HEIGHT;
+from quoridor.constants import SQUARE_SIZE, WIDTH, HEIGHT;
+from quoridor.game import Game;
 
 
 FPS = 60
@@ -8,21 +9,30 @@ FPS = 60
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption('Quoridor')
 
+def get_row_col_from_mouse(pos):
+    x, y = pos
+    row = y // SQUARE_SIZE
+    col = x // SQUARE_SIZE
+    return row, col
+
 def main():
     run = True
     clock = pygame.time.Clock()
+    game = Game(WIN)
 
     while run:
         clock.tick(FPS)
-        board = Board()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             
             if event.type == pygame.MOUSEBUTTONDOWN:
-                pass
-        board.draw(WIN)
-        pygame.display.update()
+                pos = pygame.mouse.get_pos()
+                row, col = get_row_col_from_mouse(pos)
+               
+
+        game.update()
     pygame.quit()
 
 main()

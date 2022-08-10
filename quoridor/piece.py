@@ -22,5 +22,10 @@ class Piece:
         pygame.draw.circle(win, BLACK, (self.x, self.y), radius + self.OUTLINE)
         pygame.draw.circle(win, self.color, (self.x, self.y), radius)
 
+    def move(self, row, col):
+        self.row = row
+        self.col = col
+        self.calc_pos()
+
     def __repr__(self):
         return str(self.color)
