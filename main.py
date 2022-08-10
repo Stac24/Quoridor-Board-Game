@@ -1,6 +1,6 @@
 import pygame
 from quoridor.board import Board;
-from quoridor.constants import SQUARE_SIZE, WIDTH, HEIGHT;
+from quoridor.constants import SQUARE_SIZE, WIDTH, HEIGHT, RED;
 from quoridor.game import Game;
 
 
@@ -30,6 +30,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 row, col = get_row_col_from_mouse(pos)
+                game.select(row, col)
                
 
         game.update()

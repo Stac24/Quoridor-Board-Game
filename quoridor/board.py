@@ -41,5 +41,28 @@ class Board:
                 if piece != 0:
                     piece.draw(win)
 
+
     def get_valid_moves(self, piece):
-        pass
+        moves = set()
+        row = piece.row
+        col = piece.col
+
+        # UP
+        if row - 1 in range(ROWS) and self.board[row - 1][col] == 0:
+            moves.add((row - 1, col))
+
+        # DOWN
+        if row + 1 in range(ROWS) and self.board[row + 1][col] == 0:
+            moves.add((row + 1, col))
+
+        # LEFT
+        if col - 1 in range(COLS) and self.board[row][col - 1] == 0:
+            moves.add((row, col - 1))
+
+        # RIGHT
+        if col + 1 in range(COLS) and self.board[row][col + 1] == 0:
+            moves.add((row, col + 1))
+        
+        return moves
+
+
