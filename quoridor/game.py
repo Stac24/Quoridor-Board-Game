@@ -1,6 +1,6 @@
 import pygame
-from .constants import BLUE, RED, SQUARE_SIZE, BLACK;
 from quoridor.board import Board;
+from .constants import BLUE, RED, SQUARE_SIZE, BLACK;
 
 class Game:
     def __init__(self, win):
@@ -28,17 +28,17 @@ class Game:
                 self.selected = None
                 self.select(row, col)
         
-        piece = self.board.get_piece(row, col)
-        if piece != 0 and piece.color == self.turn:
-            self.selected = piece
+        piece = self.board.get_piece(row, col) # Either none or a piece object
+        if piece and piece.color == self.turn:
+            self.selected = piece   # Piece object
             self.valid_moves = self.board.get_valid_moves(piece)
-            return True
+        return True
         
-        return False
+       # return False
 
     def move(self, row, col):
-        piece = self.board.get_piece(row, col)
-        if self.selected and piece == 0 and (row, col) in self.valid_moves:
+        piece = self.board.get_piece(row, col) # Either none or a piece object
+        if self.selected and not piece and (row, col) in self.valid_moves:
             self.board.move(self.selected, row, col)
             self.change_turn()
         else:

@@ -1,6 +1,7 @@
 import pygame;
 from .constants import WHITE, GREY, BLUE, RED, ROWS, COLS, SQUARE_SIZE;
 from .piece import Piece;
+from .cell import Cell;
 
 class Board:
     def __init__(self):
@@ -20,25 +21,25 @@ class Board:
         piece.move(row, col)
 
     def get_piece(self, row, col):
-        return self.board[row][col]
+        return self.board[row][col].get_piece()
 
 
-    def create_board(self):   # Draws pieces in starting positions and places 0's where there are no pieces
+    def create_board(self):   # Draws pieces in starting positions 
         for row in range(ROWS):
             self.board.append([])
             for col in range(COLS):
-                self.board[row].append(0)
+                self.board[row].append(Cell())
         
-        self.board[0][4] = (Piece(0, 4, RED))
-        self.board[8][4] = (Piece(8, 4, BLUE))
+        self.board[0][4].set_piece((Piece(0, 4, RED)))
+        self.board[8][4].set_piece((Piece(8, 4, BLUE)))
 
 
     def draw(self, win): # Draws pieces onto board
         self.draw_squares(win)
         for row in range(ROWS):
             for col in range(COLS):
-                piece = self.board[row][col]
-                if piece != 0:
+                piece = self.get_piece(row,col)
+                if piece:
                     piece.draw(win)
 
 
@@ -48,19 +49,19 @@ class Board:
         col = piece.col
 
         # UP
-        if row - 1 in range(ROWS) and self.board[row - 1][col] == 0:
+        if row - 1 in range(ROWS) and not self.board[row - 1][col].get_piece():
             moves.add((row - 1, col))
 
         # DOWN
-        if row + 1 in range(ROWS) and self.board[row + 1][col] == 0:
+        if row + 1 in range(ROWS) and not self.board[row + 1][col].get_piece():
             moves.add((row + 1, col))
 
         # LEFT
-        if col - 1 in range(COLS) and self.board[row][col - 1] == 0:
+        if col - 1 in range(COLS) and not self.board[row][col - 1].get_piece():
             moves.add((row, col - 1))
 
         # RIGHT
-        if col + 1 in range(COLS) and self.board[row][col + 1] == 0:
+        if col + 1 in range(COLS) and not self.board[row][col + 1].get_piece():
             moves.add((row, col + 1))
         
         return moves
