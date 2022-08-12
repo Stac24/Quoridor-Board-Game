@@ -1,3 +1,4 @@
+from re import L
 import pygame;
 from .constants import WHITE, GREY, BLUE, RED, ROWS, COLS, SQUARE_SIZE;
 from .piece import Piece;
@@ -22,6 +23,9 @@ class Board:
 
     def get_piece(self, row, col):
         return self.board[row][col].get_piece()
+    
+    def get_cell(self, row, col):
+        return self.board[row][col]
     
     def get_up_fence(self, row, col):
         return self.board[row][col].get_up_fence()
@@ -88,5 +92,19 @@ class Board:
             moves.add((row, col + 1))
         
         return moves
+
+    def get_valid_fences(self, row, col, cell):
+        fences = []
+        fences.append(row)
+        fences.append(col)
+        if not cell.get_up_fence():
+            fences.append("up")
+        if not cell.get_down_fence():
+            fences.append("down")
+        if not cell.get_left_fence():
+            fences.append("left")
+        if not cell.get_right_fence():
+            fences.append("right")
+        return fences
 
 
