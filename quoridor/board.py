@@ -22,7 +22,18 @@ class Board:
 
     def get_piece(self, row, col):
         return self.board[row][col].get_piece()
+    
+    def get_up_fence(self, row, col):
+        return self.board[row][col].get_up_fence()
 
+    def get_down_fence(self, row, col):
+        return self.board[row][col].get_down_fence()
+
+    def get_left_fence(self, row, col):
+        return self.board[row][col].get_left_fence()
+
+    def get_right_fence(self, row, col):
+        return self.board[row][col].get_right_fence()
 
     def create_board(self):   # Draws pieces in starting positions 
         for row in range(ROWS):
@@ -39,8 +50,20 @@ class Board:
         for row in range(ROWS):
             for col in range(COLS):
                 piece = self.get_piece(row,col)
+                up_fence = self.get_up_fence(row,col)
+                down_fence = self.get_down_fence(row, col)
+                left_fence = self.get_left_fence(row, col)
+                right_fence = self.get_right_fence(row,col)
                 if piece:
                     piece.draw(win)
+                if up_fence:
+                    up_fence.draw_fence_up(win)
+                if down_fence:
+                    down_fence.draw_fence_down(win)
+                if left_fence:
+                    left_fence.draw_fence_left(win)
+                if right_fence:
+                    right_fence.draw_fence_right(win)
 
 
     def get_valid_moves(self, piece):

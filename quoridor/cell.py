@@ -1,6 +1,7 @@
 import pygame;
-from .constants import SQUARE_SIZE, BLACK;
+from .constants import BLUE, RED, SQUARE_SIZE, BLACK;
 from .piece import Piece;
+from .fence import Fence;
 
 class Cell:
     
@@ -28,5 +29,16 @@ class Cell:
 
     def set_piece(self, piece):
         self.piece = piece
+
+    def draw_fences(self, win):
+        if self.up_fence:
+            Fence.draw_fence_up(win)
+        if self.down_fence:
+            Fence.draw_fence_down(win)
+        if self.left_fence:
+            Fence.draw_fence_left(win)
+        if self.right_fence:
+            Fence.draw_fence_right(win)
+
     
    
