@@ -35,12 +35,10 @@ class Board:
                 pygame.draw.rect(win, GREY, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
     
     def move(self,piece, row, col):
-        self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
+        self.board[row][col].set_piece(self.board[piece.row][piece.col].get_piece()) 
+        self.board[piece.row][piece.col].set_piece(None)
         piece.move(row, col)
 
-    def get_piece(self, row, col):
-        return self.board[row][col].get_piece()
-    
     def get_cell(self, row, col):
         return self.board[row][col]
     
@@ -70,7 +68,7 @@ class Board:
         self.draw_squares(win)
         for row in range(ROWS):
             for col in range(COLS):
-                piece = self.get_piece(row,col)
+                piece = self.board[row][col].get_piece()
                 up_fence = self.get_up_fence(row,col)
                 down_fence = self.get_down_fence(row, col)
                 left_fence = self.get_left_fence(row, col)
@@ -92,22 +90,57 @@ class Board:
         row = piece.row
         col = piece.col
 
-        # UP
-        if row - 1 in range(ROWS) and not self.board[row - 1][col].get_piece():
-            moves.add((row - 1, col))
+        if row - 1 in range(ROWS):
+            if not self.board[row - 1][col].get_piece(): 
+                if not self.board[row][col].get_up_fence():
+                    moves.add((row - 1, col))               # UP
+            else:
+                if not self.board[row][col].get_up_fence() and not self.board[row - 1][col].get_up_fence() and row - 2 in range(ROWS): # UP JUMP 
+                    moves.add((row - 2, col))
+                elif self.board[row - 1][col].get_up_fence():
+                    if not self.board[row - 1][col + 1].get_piece() and not self.board[row - 1][col].get_right_fence() and col + 1 in range(COLS):
+                        moves.add((row - 1, col + 1))  # UP-RIGHT DIAGONAL
+                    if not self.board[row - 1][col - 1].get_piece() and not self.board[row - 1][col].get_left_fence() and col - 1 in range(COLS):
+                        moves.add((row - 1, col - 1))  # UP-LEFT DIAGONAL
 
-        # DOWN
-        if row + 1 in range(ROWS) and not self.board[row + 1][col].get_piece():
-            moves.add((row + 1, col))
+        if row + 1 in range(ROWS):
+            if not self.board[row + 1][col].get_piece(): 
+                if not self.board[row][col].get_down_fence():
+                    moves.add((row + 1, col))               # DOWN
+            else:
+                if not self.board[row][col].get_down_fence() and not self.board[row + 1][col].get_down_fence() and row + 2 in range(ROWS): # DOWN JUMP 
+                    moves.add((row + 2, col))
+                elif self.board[row + 1][col].get_down_fence():
+                    if not self.board[row + 1][col + 1].get_piece() and not self.board[row + 1][col].get_right_fence() and col + 1 in range(COLS):
+                        moves.add((row + 1, col + 1))  # DOWN-RIGHT DIAGONAL
+                    if not self.board[row + 1][col - 1].get_piece() and not self.board[row + 1][col].get_left_fence() and col - 1 in range(COLS):
+                        moves.add((row + 1, col - 1))  # DOWN-LEFT DIAGONAL
 
-        # LEFT
-        if col - 1 in range(COLS) and not self.board[row][col - 1].get_piece():
-            moves.add((row, col - 1))
+        if col - 1 in range(COLS):
+            if not self.board[row][col - 1].get_piece(): 
+                if not self.board[row][col].get_left_fence():
+                    moves.add((row, col - 1))               # LEFT 
+            else:
+                if not self.board[row][col].get_left_fence() and not self.board[row][col - 1].get_left_fence() and col - 2 in range(COLS): # LEFT JUMP 
+                    moves.add((row, col - 2))
+                elif self.board[row][col - 1].get_left_fence():
+                    if not self.board[row - 1][col - 1].get_piece() and not self.board[row][col - 1].get_up_fence() and row - 1 in range(ROWS):
+                        moves.add((row - 1, col - 1))  # UP-LEFT DIAGONAL
+                    if not self.board[row + 1][col - 1].get_piece() and not self.board[row][col - 1].get_down_fence() and row + 1 in range(ROWS):
+                        moves.add((row + 1, col - 1))  # DOWN-LEFT DIAGONAL
 
-        # RIGHT
-        if col + 1 in range(COLS) and not self.board[row][col + 1].get_piece():
-            moves.add((row, col + 1))
-        
+        if col + 1 in range(COLS):
+            if not self.board[row][col + 1].get_piece(): 
+                if not self.board[row][col].get_right_fence():
+                    moves.add((row, col + 1))               # RIGHT 
+            else:
+                if not self.board[row][col].get_right_fence() and not self.board[row][col + 1].get_right_fence() and col + 2 in range(COLS): # RIGHT JUMP 
+                    moves.add((row, col + 2))
+                elif self.board[row][col + 1].get_right_fence():
+                    if not self.board[row - 1][col + 1].get_piece() and not self.board[row][col + 1].get_up_fence() and row - 1 in range(ROWS):
+                        moves.add((row - 1, col + 1))  # UP-RIGHT DIAGONAL
+                    if not self.board[row + 1][col + 1].get_piece() and not self.board[row][col + 1].get_down_fence() and row + 1 in range(ROWS):
+                        moves.add((row + 1, col + 1))  # DOWN-RIGHT DIAGONAL
         return moves
 
     def get_valid_fences(self, row, col, cell):

@@ -33,7 +33,7 @@ class Game:
                 self.selected = None
                 self.select(row, col)
         else:
-            piece = self.board.get_piece(row, col) # Either none or a piece object
+            piece = self.board.get_cell(row, col).get_piece() # Either none or a piece object
             cell = self.board.get_cell(row, col)
             if piece and piece.color == self.turn:
                 self.selected = piece   # Piece object
@@ -52,7 +52,7 @@ class Game:
        
 
     def move(self, row, col):
-        piece = self.board.get_piece(row, col) # Either none or a piece object
+        piece = self.board.get_cell(row, col).get_piece() # Either none or a piece object
         if self.selected and not piece and (row, col) in self.valid_moves:
             self.board.move(self.selected, row, col)
             self.change_turn()
