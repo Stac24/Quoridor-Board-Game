@@ -11,7 +11,24 @@ class Board:
         self.blue_fences = self.red_fences = 10
         self.create_board()
 
-    def draw_squares(self, win): # Makes checkerboard pattern on board
+    def get_blue_fences(self):
+        '''Returns the current number of fences that the blue player has'''
+        return self.blue_fences
+
+    def get_red_fences(self):
+        '''Returns the current number of fences that the red player has'''
+        return self.red_fences
+    
+    def decrement_blue_fences(self):
+        """Decrements the number of blue fences by 1"""
+        self.blue_fences -= 1
+
+    def decrement_red_fences(self):
+        """Decrements the number of red fences by 1"""
+        self.red_fences -= 1
+
+    def draw_squares(self, win): 
+        '''Makes checkerboard pattern on display'''
         win.fill(WHITE)
         for row in range(ROWS):
             for col in range(row % 2, ROWS, 2):
