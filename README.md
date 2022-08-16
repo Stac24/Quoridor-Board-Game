@@ -8,6 +8,9 @@ In general pawns can move up, down, left, or right unless blocked by a fence. Ho
 
 Secondly, if the two pawns are face-to-face and there exists a fence behind the pawn that is to be jumped, the current pawn may move diagonally to land beside the other pawn only if the pawn has no fence on that side(see image below). 
 
+<img width="800" alt="Scenario#2" src="https://user-images.githubusercontent.com/81662359/184799840-dce9c614-a809-4a03-a773-38d763f69b1a.png">
+
+
 The objective of this game is to get your pawn to the other side of the board. Use your fences wisely to block your opponent from reaching the other side before you do! 
 
 You can learn more about the rules of this game by reading this article: https://cdn.1j1ju.com/medias/fe/36/08-quoridor-rulebook.pdf
