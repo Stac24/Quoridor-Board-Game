@@ -1,5 +1,6 @@
 import pygame;
 
+# Constant values used within the game
 WIDTH, HEIGHT = 800, 800
 ROWS, COLS = 9, 9
 SQUARE_SIZE = WIDTH//COLS

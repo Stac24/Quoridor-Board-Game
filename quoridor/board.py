@@ -6,6 +6,7 @@ from .cell import Cell;
 
 class Board:
     def __init__(self):
+        '''Initializes board with two pieces and ten fences per player'''
         self.board = []
         self.blue = self.red = 1 # Each player has one piece
         self.blue_fences = self.red_fences = 10
@@ -18,14 +19,34 @@ class Board:
     def get_red_fences(self):
         '''Returns the current number of fences that the red player has'''
         return self.red_fences
-    
+
     def decrement_blue_fences(self):
-        """Decrements the number of blue fences by 1"""
+        '''Decrements the number of blue fences by 1'''
         self.blue_fences -= 1
 
     def decrement_red_fences(self):
-        """Decrements the number of red fences by 1"""
+        '''Decrements the number of red fences by 1'''
         self.red_fences -= 1
+
+    def get_up_fence(self, row, col):
+        '''Returns the up fence of the cell at the given row and col'''
+        return self.board[row][col].get_up_fence()
+
+    def get_down_fence(self, row, col):
+        '''Returns the down fence of the cell at the given row and col'''
+        return self.board[row][col].get_down_fence()
+
+    def get_left_fence(self, row, col):
+        '''Returns the left fence of the cell at the given row and col'''
+        return self.board[row][col].get_left_fence()
+
+    def get_right_fence(self, row, col):
+        '''Returns the right fence of the cell at the given row and col'''
+        return self.board[row][col].get_right_fence()
+
+    def get_cell(self, row, col):
+        '''Returns the cell object at the given row and col'''
+        return self.board[row][col]
 
     def draw_squares(self, win): 
         '''Makes checkerboard pattern on display'''
@@ -35,26 +56,13 @@ class Board:
                 pygame.draw.rect(win, GREY, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
     
     def move(self,piece, row, col):
+        '''Moves a piece from one cell to another cell'''
         self.board[row][col].set_piece(self.board[piece.row][piece.col].get_piece()) 
         self.board[piece.row][piece.col].set_piece(None)
         piece.move(row, col)
 
-    def get_cell(self, row, col):
-        return self.board[row][col]
-    
-    def get_up_fence(self, row, col):
-        return self.board[row][col].get_up_fence()
-
-    def get_down_fence(self, row, col):
-        return self.board[row][col].get_down_fence()
-
-    def get_left_fence(self, row, col):
-        return self.board[row][col].get_left_fence()
-
-    def get_right_fence(self, row, col):
-        return self.board[row][col].get_right_fence()
-
-    def create_board(self):   # Draws pieces in starting positions 
+    def create_board(self):
+        '''Places cell objects onto the board'''   
         for row in range(ROWS):
             self.board.append([])
             for col in range(COLS):
@@ -63,8 +71,8 @@ class Board:
         self.board[0][4].set_piece((Piece(0, 4, RED)))
         self.board[8][4].set_piece((Piece(8, 4, BLUE)))
 
-
-    def draw(self, win): # Draws pieces onto board
+    def draw(self, win): 
+        '''Draws pieces onto board'''
         self.draw_squares(win)
         for row in range(ROWS):
             for col in range(COLS):
@@ -84,12 +92,21 @@ class Board:
                 if right_fence:
                     right_fence.draw_fence_right(win)
 
-
     def get_valid_moves(self, piece):
+        '''Gets all valid movements for the given piece'''
         moves = set()
         row = piece.row
         col = piece.col
 
+        self.up_moves(row, col, moves)
+        self.down_moves(row, col, moves)
+        self.left_moves(row, col, moves)
+        self.right_moves(row, col, moves)
+
+        return moves
+
+    def up_moves(self, row, col, moves):
+        '''Checks for all valid up movements given the row and col of the piece'''
         if row - 1 in range(ROWS):
             if not self.board[row - 1][col].get_piece(): 
                 if not self.board[row][col].get_up_fence():
@@ -103,6 +120,8 @@ class Board:
                     if not self.board[row - 1][col - 1].get_piece() and not self.board[row - 1][col].get_left_fence() and col - 1 in range(COLS):
                         moves.add((row - 1, col - 1))  # UP-LEFT DIAGONAL
 
+    def down_moves(self, row, col, moves):
+        '''Checks for all valid down movements given the row and col of the piece'''
         if row + 1 in range(ROWS):
             if not self.board[row + 1][col].get_piece(): 
                 if not self.board[row][col].get_down_fence():
@@ -116,6 +135,8 @@ class Board:
                     if not self.board[row + 1][col - 1].get_piece() and not self.board[row + 1][col].get_left_fence() and col - 1 in range(COLS):
                         moves.add((row + 1, col - 1))  # DOWN-LEFT DIAGONAL
 
+    def left_moves(self, row, col, moves):
+        '''Checks for all valid left movements given the row and col of the piece'''
         if col - 1 in range(COLS):
             if not self.board[row][col - 1].get_piece(): 
                 if not self.board[row][col].get_left_fence():
@@ -129,6 +150,8 @@ class Board:
                     if not self.board[row + 1][col - 1].get_piece() and not self.board[row][col - 1].get_down_fence() and row + 1 in range(ROWS):
                         moves.add((row + 1, col - 1))  # DOWN-LEFT DIAGONAL
 
+    def right_moves(self, row, col, moves):
+        '''Checks for all valid right movements given the row and col of the piece'''
         if col + 1 in range(COLS):
             if not self.board[row][col + 1].get_piece(): 
                 if not self.board[row][col].get_right_fence():
@@ -141,9 +164,9 @@ class Board:
                         moves.add((row - 1, col + 1))  # UP-RIGHT DIAGONAL
                     if not self.board[row + 1][col + 1].get_piece() and not self.board[row][col + 1].get_down_fence() and row + 1 in range(ROWS):
                         moves.add((row + 1, col + 1))  # DOWN-RIGHT DIAGONAL
-        return moves
 
     def get_valid_fences(self, row, col, cell):
+        '''Checks for valid fence placenemts given a cell'''
         fences = []
         fences.append(row)
         fences.append(col)

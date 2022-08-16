@@ -5,16 +5,19 @@ from .constants import BLUE, COLS, RED, ROWS, SQUARE_SIZE, BLACK, YELLOW;
 
 class Game:
     def __init__(self, win):
+        '''Initializes the game'''
         self._init()
         self.win = win
     
     def update(self):
+        '''Updates the display for the user'''
         self.board.draw(self.win)
         self.draw_valid_moves(self.valid_moves)
         self.draw_valid_fences(self.valid_fences)
         pygame.display.update()
 
     def _init(self):
+        '''Containes everything we need to initizlize the game'''
         self.selected = None
         self.selected_type = None
         self.board = Board()
@@ -22,10 +25,8 @@ class Game:
         self.valid_moves = set()
         self.valid_fences = []
 
-    def reset(self):
-        self._init()
-
     def select(self, row, col):
+        '''Selects cells and calls methods to find valid piece movements and fence placements for selected cells'''
         if self.selected and self.selected_type == "Piece":
             self.valid_fences = []
             result = self.move(row, col)
@@ -49,9 +50,8 @@ class Game:
 
         return True
         
-       
-
     def move(self, row, col):
+        '''Moves a piece as long as it is a valid move'''
         piece = self.board.get_cell(row, col).get_piece() # Either none or a piece object
         if self.selected and not piece and (row, col) in self.valid_moves:
             self.board.move(self.selected, row, col)
@@ -63,7 +63,8 @@ class Game:
 
         return True
 
-    def place_up_fence(self):   
+    def place_up_fence(self):
+        '''Places an upper fence within a cell'''   
         if self.selected and "up" in self.valid_fences and self.check_fences():
             row, col = self.valid_fences[0], self.valid_fences[1]
             if row - 1 in range(ROWS):
@@ -74,7 +75,8 @@ class Game:
             self.decrement_fences()
             self.change_turn()
 
-    def place_down_fence(self):   
+    def place_down_fence(self): 
+        '''Places a bottom fence within a cell'''  
         if self.selected and "down" in self.valid_fences and self.check_fences():
             row, col = self.valid_fences[0], self.valid_fences[1]
             if row + 1 in range(ROWS):
@@ -85,7 +87,8 @@ class Game:
             self.decrement_fences()
             self.change_turn()
 
-    def place_left_fence(self):   
+    def place_left_fence(self):
+        '''Places a left fence within a cell'''   
         if self.selected and "left" in self.valid_fences and self.check_fences():
             row, col = self.valid_fences[0], self.valid_fences[1]
             if col - 1 in range(COLS):
@@ -96,7 +99,8 @@ class Game:
             self.decrement_fences()
             self.change_turn()
 
-    def place_right_fence(self):  
+    def place_right_fence(self): 
+        '''Places a right fence within a cell''' 
         if self.selected and "right" in self.valid_fences and self.check_fences():
             row, col = self.valid_fences[0], self.valid_fences[1]
             if col + 1 in range(COLS):
@@ -128,11 +132,13 @@ class Game:
             Board.decrement_blue_fences(self.board)
 
     def draw_valid_moves(self, moves):
+        '''Draws all valid moves for a given piece'''
         for move in moves:
             row, col = move
             pygame.draw.circle(self.win, BLACK, (col * SQUARE_SIZE + SQUARE_SIZE//2, row * SQUARE_SIZE + SQUARE_SIZE//2), 15)
 
     def draw_valid_fences(self, fences):
+        '''Draws all valid fences for a given cell'''
         if fences != []: 
             row, col = fences[0], fences[1]
             for dir in range(2, len(fences)):
@@ -145,8 +151,8 @@ class Game:
                 if fences[dir] == "right":
                     pygame.draw.line(self.win, YELLOW, (SQUARE_SIZE * col + SQUARE_SIZE, SQUARE_SIZE * row), (SQUARE_SIZE * col + SQUARE_SIZE, SQUARE_SIZE * row + SQUARE_SIZE)) 
             
-
     def change_turn(self):
+        '''Changes the turn'''
         if self.turn == RED:
             self.turn = BLUE
         else:
