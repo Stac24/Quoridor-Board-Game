@@ -1,4 +1,4 @@
-# Quoridor-Strategy-Game
+# Quoridor-Board-Game
 
 GAME RULES:
 Quoridor is a two-player strategy board game played on a 9x9 grid. Each player has one pawn and ten fences. 
