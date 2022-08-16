@@ -4,6 +4,8 @@ GAME RULES:
 Quoridor is a two-player strategy board game played on a 9x9 grid. Each player has one pawn and ten fences. 
 In general pawns can move up, down, left, or right unless blocked by a fence. However, there are two scenarios which allow for special movement. Firstly, if the two pawns are face-to-face and there is no fence in between them, the current player may jump the other pawn (see image below).
 
+<img width="796" alt="Scenario#1" src="https://user-images.githubusercontent.com/81662359/184799749-162c9e80-8506-4f3c-b0c5-aaaa11a1f2cb.png">
+
 Secondly, if the two pawns are face-to-face and there exists a fence behind the pawn that is to be jumped, the current pawn may move diagonally to land beside the other pawn only if the pawn has no fence on that side(see image below). 
 
 The objective of this game is to get your pawn to the other side of the board. Use your fences wisely to block your opponent from reaching the other side before you do! 
