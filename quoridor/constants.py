@@ -1,4 +1,5 @@
 import pygame;
+pygame.init()
 
 # Constant values used within the game
 WIDTH, HEIGHT = 800, 800
@@ -11,3 +12,5 @@ BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 YELLOW = (255,255,0)
+
+FONT = pygame.font.SysFont(None, 50, True, False)

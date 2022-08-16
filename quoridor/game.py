@@ -1,7 +1,7 @@
 import pygame
 from quoridor.board import Board
 from .fence import Fence;
-from .constants import BLUE, COLS, RED, ROWS, SQUARE_SIZE, BLACK, YELLOW;
+from .constants import BLUE, COLS, FONT, HEIGHT, RED, ROWS, SQUARE_SIZE, BLACK, WHITE, WIDTH, YELLOW;
 
 class Game:
     def __init__(self, win):
@@ -14,6 +14,7 @@ class Game:
         self.board.draw(self.win)
         self.draw_valid_moves(self.valid_moves)
         self.draw_valid_fences(self.valid_fences)
+        self.display_win()
         pygame.display.update()
 
     def _init(self):
@@ -24,6 +25,9 @@ class Game:
         self.turn = RED
         self.valid_moves = set()
         self.valid_fences = []
+        self.winner = False
+        self.blue_wins = ((0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(0,6),(0,7),(0,8))
+        self.red_wins = ((8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6),(8,7),(8,8))
 
     def select(self, row, col):
         '''Selects cells and calls methods to find valid piece movements and fence placements for selected cells'''
@@ -55,12 +59,12 @@ class Game:
         piece = self.board.get_cell(row, col).get_piece() # Either none or a piece object
         if self.selected and not piece and (row, col) in self.valid_moves:
             self.board.move(self.selected, row, col)
+            self.check_for_win(row, col)
             self.change_turn()
         else:
             self.valid_moves = set()
             self.valid_fences = []
             return False
-
         return True
 
     def place_up_fence(self):
@@ -111,7 +115,7 @@ class Game:
             self.decrement_fences()
             self.change_turn()
 
-    def check_fences(self):  # NEED TO IMPLEMENT
+    def check_fences(self):  
         '''Checks if the current player has any fences left'''
         if self.turn == RED:
             if Board.get_red_fences(self.board) > 0:
@@ -143,13 +147,36 @@ class Game:
             row, col = fences[0], fences[1]
             for dir in range(2, len(fences)):
                 if fences[dir] == "up":
-                    pygame.draw.line(self.win, YELLOW, (SQUARE_SIZE * col, SQUARE_SIZE * row), (SQUARE_SIZE * col + SQUARE_SIZE, SQUARE_SIZE * row))
+                    pygame.draw.line(self.win, YELLOW, (SQUARE_SIZE * col, SQUARE_SIZE * row), (SQUARE_SIZE * col + SQUARE_SIZE, SQUARE_SIZE * row ))
                 if fences[dir] == "down":
                      pygame.draw.line(self.win, YELLOW, (SQUARE_SIZE * col, SQUARE_SIZE * row + SQUARE_SIZE), (SQUARE_SIZE * col + SQUARE_SIZE, SQUARE_SIZE * row + SQUARE_SIZE))
                 if fences[dir] == "left":
                      pygame.draw.line(self.win, YELLOW, (SQUARE_SIZE * col, SQUARE_SIZE * row), (SQUARE_SIZE * col, SQUARE_SIZE * row + SQUARE_SIZE)) 
                 if fences[dir] == "right":
                     pygame.draw.line(self.win, YELLOW, (SQUARE_SIZE * col + SQUARE_SIZE, SQUARE_SIZE * row), (SQUARE_SIZE * col + SQUARE_SIZE, SQUARE_SIZE * row + SQUARE_SIZE)) 
+
+    def check_for_win(self, row, col):
+        '''Checks for winner after a piece is moved'''   
+        if self.turn == RED:
+            if (row, col) in self.red_wins:
+                self.winner = True
+        else:
+            if (row, col) in self.blue_wins:
+                self.winner = True
+
+    def display_win(self):
+        '''Displays message that either red or blue has won'''
+        if self.winner:
+            if self.turn == RED:
+                color = "Blue"
+                winner = BLUE
+            else:
+                color = "Red"
+                winner = RED
+            game_over_text = FONT.render("Game Over: " + color + " Wins!", True, winner, WHITE)
+            game_over_rect = game_over_text.get_rect()
+            game_over_rect.center = (WIDTH//2, HEIGHT//2)
+            self.win.blit(game_over_text, game_over_rect)
             
     def change_turn(self):
         '''Changes the turn'''

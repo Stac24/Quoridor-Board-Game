@@ -3,7 +3,6 @@ from quoridor.board import Board;
 from quoridor.constants import SQUARE_SIZE, WIDTH, HEIGHT, RED;
 from quoridor.game import Game;
 
-
 FPS = 60
 
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
