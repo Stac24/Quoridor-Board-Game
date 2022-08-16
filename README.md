@@ -23,3 +23,5 @@ Once the game is running, the starting player will always be red.
 Moving a pawn: In order to move your pawn, select your pawn by clicking on it and all valid moves will be displayed. Click on any of the valid cells to move to it. 
 Placing a fence: In order to place a fence, click on any cell. All valid fence placements will be highlighted in yellow. Use the arrow keys on your keyboard to give your selected cell an up, down, left, or right fence. 
 Once there is a winner, there will be a pop-up on the screen to let you know who won! 
+
+<img width="790" alt="Winner" src="https://user-images.githubusercontent.com/81662359/184799915-413d6895-dc5f-46e7-a1a2-9e88f7e2bf9c.png">
